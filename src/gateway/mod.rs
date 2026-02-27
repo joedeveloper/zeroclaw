@@ -306,6 +306,7 @@ pub struct AppState {
     pub observer: Arc<dyn crate::observability::Observer>,
     /// Registered tool specs (for web dashboard tools page)
     pub tools_registry: Arc<Vec<ToolSpec>>,
+    pub tools_registry_exec: Arc<Vec<Box<dyn crate::tools::Tool>>>,
     /// Cost tracker (optional, for web dashboard cost page)
     pub cost_tracker: Option<Arc<CostTracker>>,
     /// SSE broadcast channel for real-time events
@@ -395,6 +396,7 @@ pub async fn run_gateway(host: &str, port: u16, config: Config) -> Result<()> {
     );
     let tools_registry: Arc<Vec<ToolSpec>> =
         Arc::new(tools_registry_raw.iter().map(|t| t.spec()).collect());
+    let tools_registry_exec = Arc::new(tools_registry_raw);
 
     // Cost tracker (optional)
     let cost_tracker = if config.cost.enabled {
@@ -643,6 +645,7 @@ pub async fn run_gateway(host: &str, port: u16, config: Config) -> Result<()> {
         wati: wati_channel,
         observer: broadcast_observer,
         tools_registry,
+        tools_registry_exec,
         cost_tracker,
         event_tx,
     };
