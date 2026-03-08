@@ -1,5 +1,5 @@
 # ZeroClaw Docker Compose Example
-# 
+#
 # Quick start:
 #   1. Copy this file and set your API key
 #   2. Run: docker compose up -d
@@ -14,33 +14,35 @@ services:
     # build: .
     container_name: zeroclaw
     restart: unless-stopped
-    
+
     environment:
+      - API_KEY=local-lm-studio
+      - PROVIDER=compatible
+      - ZEROCLAW_ALLOW_PUBLIC_BIND=true
       # Required: Your LLM provider API key
-      - API_KEY=${API_KEY:-}
+      #- API_KEY=${API_KEY:-}
       # Or use the prefixed version:
       # - ZEROCLAW_API_KEY=${ZEROCLAW_API_KEY:-}
-      
+
       # Optional: LLM provider (default: openrouter)
       # Options: openrouter, openai, anthropic, ollama
-      - PROVIDER=${PROVIDER:-openrouter}
-      
+      #- PROVIDER=${PROVIDER:-openrouter}
+
       # Allow public bind inside Docker (required for container networking)
-      - ZEROCLAW_ALLOW_PUBLIC_BIND=true
+      #- ZEROCLAW_ALLOW_PUBLIC_BIND=true
       # Default gateway port inside container
       - ZEROCLAW_GATEWAY_PORT=${ZEROCLAW_GATEWAY_PORT:-42617}
-      
       # Optional: Model override
       # - ZEROCLAW_MODEL=anthropic/claude-sonnet-4-20250514
-      
+
     volumes:
       # Persist workspace and config (must match WORKDIR/HOME in Dockerfile)
       - zeroclaw-data:/zeroclaw-data
-      
+
     ports:
       # Gateway API port (override HOST_PORT if 42617 is taken)
       - "${HOST_PORT:-42617}:${ZEROCLAW_GATEWAY_PORT:-42617}"
-    
+
     # Resource limits
     deploy:
       resources:
@@ -54,7 +56,7 @@ services:
     # Health check — uses lightweight status instead of full diagnostics.
     # For images with curl, prefer: curl -f http://localhost:42617/health
     healthcheck:
-      test: ["CMD", "zeroclaw", "status"]
+      test: [ "CMD", "zeroclaw", "status" ]
       interval: 60s
       timeout: 10s
       retries: 3
