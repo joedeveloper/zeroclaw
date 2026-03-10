@@ -219,7 +219,8 @@ impl Tool for ShellTool {
                 }
 
                 if let Some(detector) = &self.syscall_detector {
-                    let _ = detector.inspect_command_output(
+                    let _ = SyscallAnomalyDetector::inspect_command_output(
+                        &**detector,
                         &command,
                         &stdout,
                         &stderr,

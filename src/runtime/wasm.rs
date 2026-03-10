@@ -277,7 +277,7 @@ impl WasmRuntime {
         for (module_name, digest) in &self.config.security.module_sha256 {
             Self::validate_module_name(module_name)?;
             normalized.insert(
-                module_name.clone(),
+                module_name.to_string(),
                 Self::normalize_sha256_pin(module_name, digest)?,
             );
         }

@@ -293,10 +293,13 @@ pub fn all_tools_with_runtime(
     // Web search tool (enabled by default for GLM and other models)
     if root_config.web_search.enabled {
         tool_arcs.push(Arc::new(WebSearchTool::new(
+            security.clone(),
             root_config.web_search.provider.clone(),
             root_config.web_search.brave_api_key.clone(),
+            None,
             root_config.web_search.max_results,
             root_config.web_search.timeout_secs,
+            "zeroclaw/1.0".to_string(),
         )));
     }
 
